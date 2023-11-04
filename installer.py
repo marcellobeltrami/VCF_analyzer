@@ -5,7 +5,7 @@ import subprocess
 def install_checker(package):
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
-#subprocess.check_call([sys.executable, "-m", "pip", "install", "wheel", "setuptools"])
-#install_checker("PyVCF3")
+subprocess.check_call([sys.executable, "-m", "pip", "install", "wheel", "setuptools"])
+install_checker("PyVCF3")
 #subprocess.check_call([sys.executable, ])
 
