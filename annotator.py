@@ -1,22 +1,19 @@
 #imports dependencies and main.py objects
 import main
-import vcf
+import sys
+import subprocess
 
 
-#1) Parse subset file for mutations and relevant information to be uploaded to database.  
-#FILTER: Filter status. “PASS” is left empty in output.
-def vcfparser(vcf_file):
-    print("Parsing....")
-    for record in vcf.Reader(vcf_file): 
-        print(record)
-        print(record.FILTER)
-        
+#2) Use annovar to annotate
+subset_vcf =main.subset_trio
+# Run VCF for ANNOVAR analysis 
+perl_script = r"C:\Users\marce\OneDrive\Desktop\VCF_analyzer\annovar\table_annovar.pl"
+arguments = ["-vcfinput {subset_vcf}", "humandb/", "-buildver hg19", "-out my_annotation", 
+            "-remove", "-protocol refGene,cytoBand,exac03,avsnp147,dbnsfp30a", "-operation g,r,f,f,f", "-nastring ." ,"-vcfinput", "-polish" ]
 
-#Reads file_trio 
-file_trio = open(main.subset_trio, "r") # Imports vcf from main
-print(vcfparser(file_trio))
-
-#2) Use VAPr to annotate (https://vapr.readthedocs.io/en/latest/Introduction.html)
+# Create the command
+command = ["perl", perl_script] + arguments
+subprocess.run(command)
 
 
 #3) Depending on output from 2, infer role of mutation programmatically or by hand.   
